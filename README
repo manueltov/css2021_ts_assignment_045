@@ -1,0 +1,98 @@
+***********************************************************
+	
+		SaleSys @ CSS-LEI-FCUL 
+		 
+	  Transaction Script (no persistence)
+		
+***********************************************************
+
+
+***************
+	Overview
+***************
+
+This project illustrates the application of the Transaction Script design pattern 
+(see http://martinfowler.com/eaaCatalog/transactionScript.html) over a data access layer 
+organised according with the Row Data Gateway design pattern 
+(http://martinfowler.com/eaaCatalog/rowDataGateway.html).
+
+When organising the domain logic around transaction scripts, each domain operation 
+(transaction) is handled by a method that performs all the required steps of the 
+transaction (its script) and prepares the result. It follows an imperative approach to 
+implementing domain operations and it is very appropriate when operations are simple, 
+in the sense that they do not require (advanced) concepts like inheritance or dynamic 
+binding, for instance. Typically, applications whose operations perform straightforward 
+creation, reading, updating, and deletion of data (CRUD) are good candidates for applying 
+the transaction script pattern.
+
+When the system's business logic is organised using transaction scripts, and there is the
+need to persist information, that is, to store information that will be available on 
+successive runs of the system, one good choice to organise the persistence layer is the 
+Row Data Gateway design pattern. In this pattern, there is a class per table and each 
+object represents a record. The class contains as many attributes as the fields of the 
+table, and it provides methods to insert a new record (whose data is stored in the 
+object's attributes), to update a record, to delete a record, and to fetch records
+from the database.
+
+The focus of this project is on understanding both patterns and in how they interact with 
+each other. For these reasons, this first version avoids many other details, including 
+persisting the data across multiple calls of the client application. In fact, the data 
+is kept only in memory.
+
+
+***************
+	Use Cases
+***************
+
+In this version, we consider there are the following use cases: create customer, create
+sale, add product to sale, get sale current discount and close sale. 
+
+ 
+***************
+	Layers
+***************
+
+There are three layers: the application layer, which contains the services provided 
+by the application and its role is just to provide a facade that hides  from clients 
+our decision of using the transaction script pattern and the business layer,
+which contains the handlers of use cases, the catalogs and the classes representing
+the domain objects. 
+
+For illustration purpose, we provide a very simple client.
+
+
+***************
+	Packages
+***************
+
+The code of this version (in src folder) is organized in 6 packages.  
+
+The package client contains SimpleClient class that performs a simple 
+interaction with the application, in which we add a customer, start a new sale, add two 
+products to the sale, and ask for the sale discount. 
+
+The package facade has the code of the application layer and is organised in two packages: 
+services (with the application services) and exceptions (with the exceptions thrown 
+by the application layer). 
+
+In this simple example there is only one exception class. 
+In a more involving example, there should be sub-classes of this class for signaling different 
+problems. Note that different problems are signaled using this exception. 
+
+
+***************
+	Data
+***************
+
+In this version all data is stored in memory in maps of objects.
+The implementation of the data access layer with data stored in a relational database will be 
+addressed in another version.
+
+***************
+	Concurrency 
+***************
+
+Note that in this version there is no concern at all with concurrency. 
+Issues related to concurrency are handled in forthcoming versions. 
+
+
