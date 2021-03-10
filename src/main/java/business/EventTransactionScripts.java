@@ -1,7 +1,6 @@
 package business;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import dataaccess.EventRowDataGateway;
@@ -34,16 +33,14 @@ public class EventTransactionScripts {
 		}
 		
 		
-		List<Ticket> tickets = p.get().getTickets();
-		TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.size()];
-		
-		
-		EventRowDataGateway ev = new EventRowDataGateway(name,date,p,price);
+		Ticket[] tickets = p.get().getTickets();
+		TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.length];
+		EventRowDataGateway ev = new EventRowDataGateway(name,date,p.get().getPlace(),price);
 		for (int i = 0; i < trdg.length; i++) {
-			trdg[i] = new TicketRowDataGateway(tickets.get(i),ev);
+			trdg[i] = new TicketRowDataGateway(ev.getName(),tickets[i].getPlace(),tickets[i].getRow(),tickets[i].getNumber());
 			trdg[i].insert();
 		}
-		ev.setTickets(trdg);
+
 		ev.insert();
 		
 	}

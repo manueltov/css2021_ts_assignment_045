@@ -1,12 +1,17 @@
 package dataaccess;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import datatypes.Ticket;
 
 public class PlaceRowDataGateway {
+	
+	private String place;
+	
+	public PlaceRowDataGateway(String place) {
+		this.place = place;
+	}
 
 	public static Optional<PlaceRowDataGateway> findPlaceByName(String place) {
 		// TODO Auto-generated method stub
@@ -18,9 +23,14 @@ public class PlaceRowDataGateway {
 		return false;
 	}
 
-	public List<Ticket> getTickets() {
+	public Ticket[] getTickets() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getPlace() {
+		// TODO Auto-generated method stub
+		return place;
 	}
 
 }

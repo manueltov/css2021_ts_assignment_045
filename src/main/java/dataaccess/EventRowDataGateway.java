@@ -6,9 +6,19 @@ import java.util.Optional;
 
 
 public class EventRowDataGateway {
+	
+	
+	
+	private String name;
+	private LocalDate date;
+	private String place;
+	private double price;
 
-	public EventRowDataGateway(String name, LocalDate date, Optional<PlaceRowDataGateway> p, double price) {
-		// TODO Auto-generated constructor stub
+	public EventRowDataGateway(String name, LocalDate date, String place, double price) {
+		this.name = name;
+		this.date = date;
+		this.place = place;
+		this.price = price;
 	}
 
 	public void insert() {
@@ -25,5 +35,19 @@ public class EventRowDataGateway {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public String getName() {
+		return name;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public LocalDate getDate() {
+		return date;
+	}
+	public String getPlace() {
+		return place;
+	}
+	
 
 }
