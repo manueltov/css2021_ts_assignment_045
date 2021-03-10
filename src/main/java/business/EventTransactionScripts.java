@@ -1,12 +1,12 @@
 package business;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import dataaccess.EventRowDataGateway;
 import dataaccess.PlaceRowDataGateway;
+import dataaccess.TicketRowDataGateway;
 import datatypes.Ticket;
 import facade.exceptions.ApplicationException;
 
@@ -34,21 +34,17 @@ public class EventTransactionScripts {
 		}
 		
 		
-		List<Ticket> tickets = p.getTickets();
-		TicketRowDataGateway[] trdg = new ArrayList<TicketRowDataGateway>();
+		List<Ticket> tickets = p.get().getTickets();
+		TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.size()];
 		
 		
 		EventRowDataGateway ev = new EventRowDataGateway(name,date,p,price);
-		for (Ticket t : tickets) {
-			trdg.add(new TicketRowDataGateway(ev,price));
+		for (int i = 0; i < trdg.length; i++) {
+			trdg[i] = new TicketRowDataGateway(tickets.get(i),ev);
+			trdg[i].insert();
 		}
 		ev.setTickets(trdg);
 		ev.insert();
-		
-		
-		
-		
-		
 		
 	}
 

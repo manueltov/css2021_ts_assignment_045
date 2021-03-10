@@ -21,4 +21,9 @@ public class EventRowDataGateway {
 		return null;
 	}
 
+	public void setTickets(TicketRowDataGateway[] trdg) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
