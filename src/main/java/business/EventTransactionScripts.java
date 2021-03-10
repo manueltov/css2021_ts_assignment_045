@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import dataaccess.EventRowDataGateway;
 import dataaccess.PlaceRowDataGateway;
+import dataaccess.ReserveRowDataGateway;
 import dataaccess.TicketRowDataGateway;
 import datatypes.Ticket;
 import facade.exceptions.ApplicationException;
@@ -24,7 +25,7 @@ public class EventTransactionScripts {
 			throw new ApplicationException("Place not found.");
 		}
 		
-		if(!PlaceRowDataGateway.isAvailable(place,date)) {
+		if(ReserveRowDataGateway.haveReserve(place,date)) {
 			throw new ApplicationException("Place not avaiable.");
 		}
 		
@@ -40,8 +41,8 @@ public class EventTransactionScripts {
 			trdg[i] = new TicketRowDataGateway(ev.getName(),tickets[i].getPlace(),tickets[i].getRow(),tickets[i].getNumber());
 			trdg[i].insert();
 		}
-
 		ev.insert();
+		
 	}
 
 	private boolean checkPrice(double price) {

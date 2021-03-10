@@ -1,7 +1,10 @@
 package client;
 
+import java.time.LocalDate;
+
 import facade.exceptions.ApplicationException;
 import facade.services.CustomerService;
+import facade.services.EventService;
 import facade.services.SaleService;
 
 /**
@@ -27,6 +30,16 @@ public final class SimpleClient {
 		// Access both available services
 		CustomerService cs = CustomerService.INSTANCE;
 		SaleService ss = SaleService.INSTANCE;		
+		EventService es = EventService.INSTANCE;
+		
+		try {
+			es.createEvent("Evento", LocalDate.now(), "", 2.0);
+		}catch (ApplicationException e) {
+			e.printStackTrace();
+			return;
+		}
+	
+		
 		
 		// the interaction
 		try {

@@ -26,14 +26,9 @@ public class EventRowDataGateway {
 		
 	}
 
-	public static Optional<PlaceRowDataGateway> findEventByName(String name) {
+	public static Optional<EventRowDataGateway> findEventByName(String name) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setTickets(TicketRowDataGateway[] trdg) {
-		// TODO Auto-generated method stub
-		
+		return Optional.ofNullable(null);
 	}
 
 	public String getName() {
@@ -47,6 +42,11 @@ public class EventRowDataGateway {
 	}
 	public String getPlace() {
 		return place;
+	}
+	
+	@Override
+	public String toString() {
+		return name+" | "+place+" | "+date.toString()+" | Ticket Price:"+price;
 	}
 	
 

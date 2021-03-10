@@ -1,6 +1,5 @@
 package dataaccess;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,16 +14,16 @@ public class PlaceRowDataGateway {
 	
 	public PlaceRowDataGateway(String place,int numberOfSeats,int numberOfRows) {
 		this.place = place;
+		this.numberOfRows = numberOfRows;
+		this.numberOfSeats = numberOfSeats;
 	}
 
 	public static Optional<PlaceRowDataGateway> findPlaceByName(String place) {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.ofNullable(null);
 	}
-
-	public static boolean isAvailable(String place, LocalDate date) {
-		// TODO Auto-generated method stub
-		return false;
+	
+	public void insert() {
+		//TODO
 	}
 
 	public Ticket[] getTickets() {
