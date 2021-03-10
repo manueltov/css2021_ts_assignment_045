@@ -4,12 +4,12 @@ package dataaccess;
 public class TicketRowDataGateway {
 	
 	private String eventName;
-	private String row;
+	private char row;
 	private String place;
 	private int number;
 	private boolean available;
 	
-	public TicketRowDataGateway(String eventName,String place, String row, int number) {
+	public TicketRowDataGateway(String eventName,String place, char row, int number) {
 		this.place = place;
 		this.row = row;
 		this.number = number;
@@ -25,7 +25,7 @@ public class TicketRowDataGateway {
 		return number;
 	}
 	
-	public String getRow() {
+	public char getRow() {
 		return row;
 	}
 

@@ -3,16 +3,16 @@ package datatypes;
 public class Ticket {
 
 	private int number;
-	private String row;
+	private char row;
 	private String place;
 	
-	public Ticket(String row,int number,String place) {
+	public Ticket(char row,int number,String place) {
 		this.row = row;
 		this.number = number;
 		this.place = place;
 	}
 	
-	public String getRow() {
+	public char getRow() {
 		return row;
 	}
 	

@@ -42,7 +42,6 @@ public class EventTransactionScripts {
 		}
 
 		ev.insert();
-		
 	}
 
 	private boolean checkPrice(double price) {
