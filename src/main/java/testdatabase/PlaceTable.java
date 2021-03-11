@@ -2,12 +2,12 @@ package testdatabase;
 
 import java.util.HashMap;
 
-import dataaccess.EventRowDataGateway;
+import dataaccess.PlaceRowDataGateway;
 
 public class PlaceTable {
 
 	
-	private HashMap<String,EventRowDataGateway> places; 
+	private HashMap<String,PlaceRowDataGateway> places; 
 	private static PlaceTable singleton = null;
 	
 	private PlaceTable() {
@@ -21,11 +21,11 @@ public class PlaceTable {
 		return singleton;
 	}
 	
-	public void createRow(EventRowDataGateway row) {
-		places.put(row.getName(),row);
+	public void createRow(PlaceRowDataGateway row) {
+		places.put(row.getPlace(),row);
 	}
 	
-	public EventRowDataGateway getRow(String name) {
+	public PlaceRowDataGateway getRow(String name) {
 		return places.get(name);
 	}
 }

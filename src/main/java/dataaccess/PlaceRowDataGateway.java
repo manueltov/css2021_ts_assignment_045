@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import datatypes.Ticket;
+import testdatabase.PlaceTable;
 
 public class PlaceRowDataGateway {
 	
+	private static PlaceTable table = PlaceTable.getInstance();
 	private String place;
 	private int numberOfSeats;
 	private int numberOfRows;
@@ -19,11 +21,11 @@ public class PlaceRowDataGateway {
 	}
 
 	public static Optional<PlaceRowDataGateway> findPlaceByName(String place) {
-		return Optional.ofNullable(null);
+		return Optional.ofNullable(table.getRow(place));
 	}
 	
 	public void insert() {
-		//TODO
+		table.createRow(this);
 	}
 
 	public Ticket[] getTickets() {

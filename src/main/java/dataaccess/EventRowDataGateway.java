@@ -3,12 +3,14 @@ package dataaccess;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import testdatabase.EventTable;
+
 
 
 public class EventRowDataGateway {
 	
 	
-	
+	private static EventTable table = EventTable.getInstance();
 	private String name;
 	private LocalDate date;
 	private String place;
@@ -22,13 +24,11 @@ public class EventRowDataGateway {
 	}
 
 	public void insert() {
-		// TODO Auto-generated method stub
-		
+		table.createRow(this);		
 	}
 
 	public static Optional<EventRowDataGateway> findEventByName(String name) {
-		// TODO Auto-generated method stub
-		return Optional.ofNullable(null);
+		return Optional.ofNullable(table.getRow(name));
 	}
 
 	public String getName() {

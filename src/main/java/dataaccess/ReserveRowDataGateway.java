@@ -2,8 +2,11 @@ package dataaccess;
 
 import java.time.LocalDate;
 
+import testdatabase.ReserveTable;
+
 public class ReserveRowDataGateway {
 
+	private static ReserveTable table = ReserveTable.getInstance();
 	private String place;
 	private LocalDate date;
 	
@@ -13,8 +16,7 @@ public class ReserveRowDataGateway {
 	}
 
 	public static boolean haveReserve(String place, LocalDate date) {
-		// TODO Auto-generated method stub
-		return false;
+		return table.haveReserve(place,date);
 	}
 	
 	public String getPlace() {
