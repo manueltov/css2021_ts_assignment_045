@@ -3,24 +3,21 @@ package dataaccess;
 
 public class TicketRowDataGateway {
 	
-	private String eventName;
+	private int eventID;
 	private char row;
-	private String place;
+	private int placeID;
+	private int seatID;
 	private int number;
 	private boolean available;
 	
-	public TicketRowDataGateway(String eventName,String place, char row, int number) {
-		this.place = place;
-		this.row = row;
-		this.number = number;
-		this.eventName = eventName;
+	public TicketRowDataGateway(int eventID,int place,int seatID) {
+		this.placeID = place;
+		this.eventID = eventID;
 		this.available = true;
+		this.seatID = seatID;
 	}
 	
-	public String getPlace() {
-		return place;
-	}
-		
+
 	public int getNumber() {
 		return number;
 	}
@@ -37,13 +34,24 @@ public class TicketRowDataGateway {
 		this.available = available;
 	}
 	
-	public String getEventName() {
-		return eventName;
-	}
-		
 	public boolean isAvailable() {
 		return available;
 	}
+	
+	public int getSeatID() {
+		return seatID;
+	}
+	
+	public int getEventID() {
+		return eventID;
+	}
+	public int getPlaceID() {
+		return placeID;
+	}
+	 
+	
+	
+	
 	
 
 }
