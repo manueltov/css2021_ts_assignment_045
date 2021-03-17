@@ -17,7 +17,7 @@ public class RunSQLScript {
 	}
 	
     public static void runScript(Connection connection, String scriptFilename) throws IOException, SQLException {
-        try (BufferedReader br = new BufferedReader(new FileReader(scriptFilename))) {
+    	try (BufferedReader br = new BufferedReader(new FileReader(scriptFilename))) {
             String command;
             int i = 1;
             while ((command = br.readLine()) != null) {

@@ -54,6 +54,13 @@ public class EventRowDataGateway {
 			"from " + TABLE_NAME + " " +
             "where " + NAME_COLUMN_NAME + " = ?";
 	
+	private static final String GET_EVENT_BY_PLACE_ID_SQL = 
+			"select " + ID_COLUMN_NAME + ", " + DATE_COLUMN_NAME + ", " + PLACE_ID_COLUMN_NAME + ", " + 
+					PRICE_TOTAL_COLUMN_NAME + ", " + NAME_COLUMN_NAME + " " +
+			"from " + TABLE_NAME + " " +
+            "where " + PLACE_ID_COLUMN_NAME + " = ?";
+	
+	
 		
 	private String name;
 	private java.sql.Date date;
@@ -84,7 +91,7 @@ public class EventRowDataGateway {
 				eventID = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException ("Internal error inserting a new sale!", e);
+			throw new PersistenceException ("Internal error inserting a new event!", e);
 		}	
 	}
 	
@@ -125,6 +132,7 @@ public class EventRowDataGateway {
 			rs.next();
 			EventRowDataGateway row = new EventRowDataGateway(rs.getString(NAME_COLUMN_NAME),
 					rs.getDate(DATE_COLUMN_NAME), rs.getInt(PLACE_ID_COLUMN_NAME),rs.getDouble(PRICE_TOTAL_COLUMN_NAME));
+			row.setEventID(rs.getInt(ID_COLUMN_NAME));
 			return row;
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Sale does not exist	", e);
@@ -149,8 +157,24 @@ public class EventRowDataGateway {
 		return name+" | "+placeID+" | "+date.toString()+" | Ticket Price:"+price;
 	}
 
-	public static boolean haveReserve(String place, Date date2) {
-		return true;
+	@SuppressWarnings("deprecation")
+	public static boolean haveReserve(int placeID, Date date) {
+		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_EVENT_BY_PLACE_ID_SQL)) {
+			statement.setInt(1, placeID);
+			try (ResultSet rs = statement.executeQuery()) {
+				while(rs.next()) {
+					if(rs.getDate(DATE_COLUMN_NAME).getDay() == date.getDay()) {
+						return true;
+					}
+				}
+				return false;
+			}
+		} catch (SQLException | PersistenceException e) {
+			// log the exception so we can understand the problem in finer detail
+			//log.log(Level.SEVERE, "Internal error getting a sale", e);
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public int getEventID() {

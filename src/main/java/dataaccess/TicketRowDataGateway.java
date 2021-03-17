@@ -11,7 +11,7 @@ public class TicketRowDataGateway {
 	/**
 	 * Table name
 	 */
-	private static final String TABLE_NAME = "seat";
+	private static final String TABLE_NAME = "ticket";
 
 	/**
 	 * Column labels
@@ -54,7 +54,10 @@ public class TicketRowDataGateway {
 		this.ticketID = -1;
 	}
 	
-	
+	public void sellTicket() {
+		this.status = SOLD;
+		//TODO
+	}
 	
 	public String getStatus() {
 		return status;
@@ -81,12 +84,19 @@ public class TicketRowDataGateway {
 			rs.next();
 			TicketRowDataGateway row = new TicketRowDataGateway(rs.getInt(EVENT_ID_COLUMN_NAME),rs.getInt(PLACE_ID_COLUMN_NAME),
 					rs.getInt(SEAT_ID_COLUMN_NAME));
+			row.setTicketID(rs.getInt(ID_COLUMN_NAME));
 			return row;
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Sale does not exist	", e);
 		}
 	}
 	
+
+	private void setTicketID(int id) {
+		this.seatID = id;
+	}
+
+
 
 	public void insert() throws PersistenceException {
 		try (PreparedStatement statement = DataSource.INSTANCE.prepareGetGenKey(INSERT_TICKET_SQL)) {
@@ -102,7 +112,7 @@ public class TicketRowDataGateway {
 				ticketID = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException ("Internal error inserting a new sale!", e);
+			throw new PersistenceException ("Internal error inserting a new ticket!", e);
 		}
 	}
 	

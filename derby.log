@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed Mar 17 16:21:30 GMT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0178-40fd-faa7-000000c82058 
-on database directory C:\Users\Manuel\OneDrive - Universidade de Lisboa\ESTUDOS\2-CSS - Construção de Sistemas de Software\PRATICAS\css2021_ts_assignment_045\data\derby\cssdb with class loader sun.misc.Launcher$AppClassLoader@139a55 
-Loaded from file:/C:/Users/Manuel/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
+Wed Mar 17 20:01:47 GMT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0178-41c7-aa8f-0000071b4c70 
+on database directory C:\Users\eduar\git\css2021_ts_assignment_045\data\newderby\db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
+Loaded from file:/C:/Users/eduar/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_281-b09
-user.dir=C:\Users\Manuel\OneDrive - Universidade de Lisboa\ESTUDOS\2-CSS - Construção de Sistemas de Software\PRATICAS\css2021_ts_assignment_045
+java.runtime.version=1.8.0_212-b10
+user.dir=C:\Users\eduar\git\css2021_ts_assignment_045
 os.name=Windows 10
-os.arch=x86
+os.arch=amd64
 os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

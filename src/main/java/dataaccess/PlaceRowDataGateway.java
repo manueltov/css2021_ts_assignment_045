@@ -48,7 +48,7 @@ public class PlaceRowDataGateway {
 	
 	public PlaceRowDataGateway(String place) {
 		this.place = place;
-		placeID = -1;
+		this.placeID = -1;
 	}
 
 	public static Optional<PlaceRowDataGateway> findPlaceByName(String place) {
@@ -87,9 +87,10 @@ public class PlaceRowDataGateway {
 		try {
 			rs.next();
 			PlaceRowDataGateway row = new PlaceRowDataGateway(rs.getString(PLACE_COLUMN_NAME));
+			row.setPlaceID(rs.findColumn(ID_COLUMN_NAME));
 			return row;
 		} catch (SQLException e) {
-			throw new RecordNotFoundException ("Sale does not exist	", e);
+			throw new RecordNotFoundException ("Place does not exist", e);
 		}
 	}
 
@@ -105,7 +106,7 @@ public class PlaceRowDataGateway {
 				placeID = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			throw new PersistenceException ("Internal error inserting a new sale!", e);
+			throw new PersistenceException ("Internal error inserting a new place!", e);
 		}
 	}
 

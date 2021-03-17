@@ -3,6 +3,7 @@ package dataaccess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import datatypes.SeatType;
@@ -18,7 +19,7 @@ public class SeatRowDataGateway {
 	 * Column labels
 	 */
 	private static final String ID_COLUMN_NAME = "id";
-	private static final String PLACEID_COLUMN_NAME = "place";
+	private static final String PLACE_ID_COLUMN_NAME = "place_id";
 	private static final String FILA_COLUMN_NAME = "fila";
 	private static final String LUGAR_COLUMN_NAME = "lugar";
 	private static final String SEAT_TYPE_COLUMN_NAME = "seat_type";
@@ -28,13 +29,13 @@ public class SeatRowDataGateway {
 	 * insert a sale
 	 */
 	private static final String INSERT_SEAT_SQL =
-			"insert into " + TABLE_NAME + " (" + PLACEID_COLUMN_NAME + ", " + FILA_COLUMN_NAME + ", " + 
+			"insert into " + TABLE_NAME + " (" + PLACE_ID_COLUMN_NAME + ", " + FILA_COLUMN_NAME + ", " + 
 					LUGAR_COLUMN_NAME + ", " + SEAT_TYPE_COLUMN_NAME +") " +
 					"values (?, ?, ?, ?)";
 
 
 	private static final String GET_SEAT_BY_ID_SQL = 
-			"select " + ID_COLUMN_NAME + ", " + PLACEID_COLUMN_NAME + ", " + FILA_COLUMN_NAME + ", " + 
+			"select " + ID_COLUMN_NAME + ", " + PLACE_ID_COLUMN_NAME + ", " + FILA_COLUMN_NAME + ", " + 
 					LUGAR_COLUMN_NAME + ", " + SEAT_TYPE_COLUMN_NAME + " " +
 					"from " + TABLE_NAME + " " +
 					"where " + ID_COLUMN_NAME + " = ?";
@@ -74,6 +75,7 @@ public class SeatRowDataGateway {
 			rs.next();
 			SeatRowDataGateway row = new SeatRowDataGateway(rs.getInt(ID_COLUMN_NAME),rs.getString(FILA_COLUMN_NAME),
 					rs.getInt(LUGAR_COLUMN_NAME),SeatType.valueOf(rs.getString(SEAT_TYPE_COLUMN_NAME)));
+			row.setSeatID(rs.getInt(ID_COLUMN_NAME));
 			return row;
 		} catch (SQLException e) {
 			throw new RecordNotFoundException ("Sale does not exist	", e);
@@ -125,7 +127,24 @@ public class SeatRowDataGateway {
 	}
 
 	public static Integer[] getIDsOfPlace(int placeID) {
-		return null;
+		ArrayList<Integer> ids = new ArrayList<>();
+		try (PreparedStatement statement = DataSource.INSTANCE.prepare(GET_SEAT_BY_ID_SQL)) {
+			// set statement arguments
+			statement.setInt(1, placeID);
+			// execute SQL
+			try (ResultSet rs = statement.executeQuery()) {
+				// creates a new customer with the data retrieved from the database
+				while(rs.next()) {
+					ids.add(rs.getInt(ID_COLUMN_NAME));
+				}
+				Integer[] aux = new Integer[ids.size()];
+				return ids.toArray(aux);
+			}
+		} catch (SQLException | PersistenceException e) {
+			// log the exception so we can understand the problem in finer detail
+			//log.log(Level.SEVERE, "Internal error getting a sale", e);
+			return new Integer[] {};
+		}
 	}
 
 

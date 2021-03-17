@@ -56,8 +56,10 @@ public enum DataSource {
     public DataSource connect(String url, String username, String password) throws PersistenceException {
         try {
             connection = DriverManager.getConnection(url, username, password);
+            System.out.println("Connection:"+connection);
             return INSTANCE;
         } catch (SQLException e) {
+        	e.printStackTrace();
             throw new PersistenceException("Cannot connect to database", e);
         }
     }

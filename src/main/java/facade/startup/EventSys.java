@@ -1,5 +1,6 @@
 package facade.startup;
 
+
 import dataaccess.DataSource;
 import dataaccess.PersistenceException;
 import facade.exceptions.ApplicationException;
@@ -13,7 +14,7 @@ public class EventSys {
 	    public void run() throws ApplicationException {
 	        // Connects to the database
 	        try {
-	            DataSource.INSTANCE.connect(DB_CONNECTION_STRING + ";create=false", "EventSys", "");
+	            DataSource.INSTANCE.connect(DB_CONNECTION_STRING + ";create=false", "", "");
 	            eventService = EventService.INSTANCE;
 	        } catch (PersistenceException e) {
 	            throw new ApplicationException("Error connecting database", e);

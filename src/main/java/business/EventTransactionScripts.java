@@ -16,47 +16,39 @@ public class EventTransactionScripts {
 		if(name.trim().length() == 0) {
 			throw new ApplicationException("Event name not valid.");
 		}
-		
+
 		if(EventRowDataGateway.findEventByName(name).isPresent()) {
 			throw new ApplicationException("Event already exists.");
 		}
-		
+
 		Optional<PlaceRowDataGateway> p = PlaceRowDataGateway.findPlaceByName(place);
 		if(!p.isPresent()) {
 			throw new ApplicationException("Place not found.");
 		}
-		
-		if(EventRowDataGateway.haveReserve(place,date)) {
-			throw new ApplicationException("Place not avaiable.");
+
+		if(EventRowDataGateway.haveReserve(p.get().getPlaceID(),date)) {
+			throw new ApplicationException("Place not available.");
 		}
-		
+
 		if(!checkPrice(price)) {
 			throw new ApplicationException("Invalid price, price can not be 0 or less.");
 		}
-		
-		
-		Integer[] tickets = SeatRowDataGateway.getIDsOfPlace(p.get().getPlaceID());
-		TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.length];
-		EventRowDataGateway ev = new EventRowDataGateway(name,date,p.get().getPlaceID(),price);
-		for (int i = 0; i < trdg.length; i++) {
-			trdg[i] = new TicketRowDataGateway(ev.getEventID(),p.get().getPlaceID(),tickets[i]);
-			if(trdg[i].getEventID() == -1 || trdg[i].getPlaceID() == -1 || trdg[i].getSeatID() == -1) {
-				throw new ApplicationException("Error while creating tickets.");
-			}
-			try {
-				trdg[i].insert();
-			} catch (PersistenceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		try {
+			EventRowDataGateway ev = new EventRowDataGateway(name,date,p.get().getPlaceID(),price);
 			ev.insert();
+			Integer[] tickets = SeatRowDataGateway.getIDsOfPlace(p.get().getPlaceID());
+			TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.length];
+			for (int i = 0; i < trdg.length; i++) {
+				trdg[i] = new TicketRowDataGateway(ev.getEventID(),p.get().getPlaceID(),tickets[i]);
+				if(trdg[i].getEventID() == -1 || trdg[i].getPlaceID() == -1 || trdg[i].getSeatID() == -1) {
+					throw new PersistenceException("Error while creating tickets.");
+				}
+				trdg[i].insert();
+			}
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private boolean checkPrice(double price) {
