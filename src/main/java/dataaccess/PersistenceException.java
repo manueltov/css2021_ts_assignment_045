@@ -1,18 +1,13 @@
-package facade.exceptions;
+package dataaccess;
 
 
 /**
  * The top level application exception.
- * <p>
- * In this simple example there is only one exception.
- * In a more involving example, there should be sub-classes of this class.
- * Note that low-level exceptions (like RecordNotFoundException) are wrapped
- * in this exception.
  *
  * @author fmartins
- * @version 1.1 (4/10/2014)
+ * @version 1.1 (18/02/2015)
  */
-public class ApplicationException extends Exception {
+public class PersistenceException extends Exception {
 
     /**
      * The serial version id (generated automatically by Eclipse)
@@ -25,7 +20,7 @@ public class ApplicationException extends Exception {
      *
      * @param message The error message
      */
-    public ApplicationException(String message) {
+    public PersistenceException(String message) {
         super(message);
     }
 
@@ -36,7 +31,7 @@ public class ApplicationException extends Exception {
      * @param message The error message
      * @param e       The wrapped exception.
      */
-    public ApplicationException(String message, Exception e) {
+    public PersistenceException(String message, Exception e) {
         super(message, e);
     }
 

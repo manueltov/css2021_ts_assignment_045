@@ -1,65 +1,82 @@
 ***********************************************************
 	
-		SaleSys @ CSS-LEI-FCUL 
+		SaleSys @  CSS-LEI-FCUL 
 		 
-	  Transaction Script (no persistence)
+Transaction Script + Row Data Gateway + Embedded Derby DB
 		
 ***********************************************************
-
 
 ***************
 	Overview
 ***************
 
-This project illustrates the application of the Transaction Script design pattern 
-(see http://martinfowler.com/eaaCatalog/transactionScript.html) over a data access layer 
-organised according with the Row Data Gateway design pattern 
-(http://martinfowler.com/eaaCatalog/rowDataGateway.html).
-
-When organising the domain logic around transaction scripts, each domain operation 
-(transaction) is handled by a method that performs all the required steps of the 
-transaction (its script) and prepares the result. It follows an imperative approach to 
-implementing domain operations and it is very appropriate when operations are simple, 
-in the sense that they do not require (advanced) concepts like inheritance or dynamic 
-binding, for instance. Typically, applications whose operations perform straightforward 
-creation, reading, updating, and deletion of data (CRUD) are good candidates for applying 
+This project illustrates the application of the Transaction Script design pattern (see
+http://martinfowler.com/eaaCatalog/transactionScript.html), the Row Data Gateway design
+pattern (http://martinfowler.com/eaaCatalog/rowDataGateway.html), and the interaction
+between both. When organising the domain logic around transaction scripts, each domain
+operation (transaction) is handled by a method that performs all the required steps of the
+transaction (its script) and prepares the result. It follows an imperative approach to
+implementing domain operations and it is very appropriate when operations are simple, in
+the sense that they do not require (advanced) concepts like inheritance or dynamic
+binding, for instance. Typically, applications whose operations perform straightforward
+creation, reading, updating, and deletion of data (CRUD) are good candidates for applying
 the transaction script pattern.
 
 When the system's business logic is organised using transaction scripts, and there is the
-need to persist information, that is, to store information that will be available on 
-successive runs of the system, one good choice to organise the persistence layer is the 
-Row Data Gateway design pattern. In this pattern, there is a class per table and each 
-object represents a record. The class contains as many attributes as the fields of the 
-table, and it provides methods to insert a new record (whose data is stored in the 
-object's attributes), to update a record, to delete a record, and to fetch records
-from the database.
+need to persist information, that is, to store information that will be available on
+successive runs of the system, one good choice to organise the persistence layer is the
+Row Data Gateway design pattern. In this pattern, there is a class per table and each
+object represents a record. The class contains as many attributes as the fields of the
+table, and it provides methods to insert a new record (whose data is stored in the
+object's attributes), to update a record, to delete a record, and to fetch records from
+the database.
 
-The focus of this project is on understanding both patterns and in how they interact with 
-each other. For these reasons, this first version avoids many other details, including 
-persisting the data across multiple calls of the client application. In fact, the data 
-is kept only in memory.
+The focus of this project is in understanding both patterns and in how they interact with
+each other. Additionally, the project also illustrates the use of JDBC in the persistence
+layer for interacting with the relational database which stores the persistent data.
 
-
-***************
-	Use Cases
-***************
-
-In this version, we consider there are the following use cases: create customer, create
-sale, add product to sale, get sale current discount and close sale. 
-
- 
 ***************
 	Layers
 ***************
 
-There are three layers: the application layer, which contains the services provided 
-by the application and its role is just to provide a facade that hides  from clients 
-our decision of using the transaction script pattern and the business layer,
-which contains the handlers of use cases, the catalogs and the classes representing
-the domain objects. 
+The system is organised in three layers: the application, the business and the
+persistence, together we a very simple client.
 
-For illustration purpose, we provide a very simple client.
+The application layer contains the services provided by the application and its role (in
+this version) is just to provide a facade that hides from clients our decision of using
+the transaction script pattern. The business layer contains the scripts for the
+transactions for customers and for sales. The customer transaction (addCustomer) is in the
+CustomerTransactionScript class and allows for the creation of a customer. The sale's
+transactions are newSale, addProductToSale, and getSaleDiscount. Since sale transactions
+are not written in many lines of code, we decided to include them all in the same class
+(SaleTransactionScripts); this does not infringe the high cohesion principle
+(https://en.wikipedia.org/wiki/GRASP_(object-oriented_design)) and keeps things simple.
+Another possibility would be to arrange a transaction per class.
 
+Services are implemented as singletons (vide http://www.oodesign.com/singleton-pattern.html 
+and the GoF book). In this simple case a service class is instantiated when the client 
+(SimpleClient) requests the first transaction and then the same object is used for handling 
+all the remaining requests. For that we use an enumerated class with a single constant named 
+INSTANCE. This implementation is simple, follows the lazy loading approach, and thread safe. 
+In a more complex scenario the responsibility of instantiating object for handling transaction 
+requests could be, for instance, of the application server, that would manage a pool of services 
+and assign CustomerService objects to clients upon request arrivals.
+
+The persistence layer contains the Row Data Gateways for each table of the database.
+The interaction with the database relies on JDBC. 
+
+***************
+	Persistence
+***************
+
+Persistence in this version is achieved through the use of a Derby database (https://db.apache.org/derby/).
+Derby is a database developed entirely in Java that can run embedded with your application. 
+This means that the database engine will run in the same JVM as your program, which facilitates 
+the installation (Derby is distributed as a jar file), configuration, etc. 
+This option is perfectly acceptable for applications that do not demand too much from a database engine.
+
+The Derby database is stored in the data/derby folder. You can remove it whenever you
+want. Running the CreateDatabase class in package dbutils brings it back brand new.
 
 ***************
 	Packages
@@ -69,30 +86,74 @@ The code of this version (in src folder) is organized in 6 packages.
 
 The package client contains SimpleClient class that performs a simple 
 interaction with the application, in which we add a customer, start a new sale, add two 
-products to the sale, and ask for the sale discount. 
+products to the sale, and ask for  the sale discount. It is more than enough to illustrate both 
+patterns and their interaction.
 
-The package facade has the code of the application layer and is organised in two packages: 
-services (with the application services) and exceptions (with the exceptions thrown 
-by the application layer). 
+In a "real" scenario the application will run inside an application server, but for
+now clients have to start the application. So the SimpleClient creates a SaleSys
+object, indicates that it want to start running the application, interacts with it, and in
+the end stops the application. When the application starts it initialises both the service
+and the business layers, and establishes a connection with the cssdb Derby database (see
+the run method).
+
+The package facade has the code of the application layer and is organised in three packages: 
+services (with the application services), exceptions (with the exceptions thrown 
+by the application layer) and startup (for the startup use case). 
 
 In this simple example there is only one exception class. 
 In a more involving example, there should be sub-classes of this class for signaling different 
-problems. Note that different problems are signaled using this exception. 
+problems. Note that low-level exceptions (like PersistenceException thrown 
+at the persistence layer) are wrapped using this exception. 
 
 
-***************
-	Data
-***************
+The package dataaccess has the code of the persistence layer related with the RDGWs. 
+Additionally, there is the package dbutils that makes available three classes: 
 
-In this version all data is stored in memory in maps of objects.
-The implementation of the data access layer with data stored in a relational database will be 
-addressed in another version.
+- CreateDatabase that creates the SaleSys database in Derby; you need to run it before running the
+SimpleClient for the first time (or if you meanwhile have deleted the database)
+
+- ResetTables that clears the Customer, Sale and SaleProduct tables so you
+can run SimpleClient multiple times without changing SimpleClient code. Note that the
+SimpleClient inserts a new customer and that only one customer with the same VAT number
+can exists in the system. So, if you run the SimpleClient twice without changing its code,
+it will fail with a duplicate key exception thrown from the database
+
+- RunSQLScript is a class to execute SQL commands in a text file; the used scripts are in the data/scripts
+folder.
+
 
 ***************
 	Concurrency 
 ***************
 
 Note that in this version there is no concern at all with concurrency. 
-Issues related to concurrency are handled in forthcoming versions. 
+Issues related to concurrency are handled in later examples throughout the semester. 
+For instance, there is a race condition in the addProductToSale transaction (see
+method addProductToSale of the SaleService class), but we will addressed later.  
 
+Don't you know what a race condition is? Informally speaking, a method has a race
+condition when its correctness depends on the order of execution of its multiple
+threads/processes. In this case, suppose that there are two customers adding the same
+product to (maybe different) sales. Furthermore, imagine that the stock for the product is
+100 units and both customers want to buy 90 of them. At a first glance we may argue that
+this is impossible to happen due to the if statement's guard (product.getQty() >= qty)
+that enforces that the sale only take place if there is enough stock of the product.
+However, this is not the case. Picture the following scenario: 
+	
+	1. the first customer executes the getProduct method and creates the row data gateway 
+	in memory where there is information about 100 units of the product;
 
+	2. then the second customer also executes the getProduct method (before the first
+	updates the product's stock) and creates its own copy of the row data gateway in
+	memory, also with information about 100 units of the product;
+
+	3. Of course the product.getQty() >= qty guard is going to true in both
+	threads/processes and both will decrease the stock of the product ending with -80
+	units, which is what we had in mind in the first place.
+
+Notice that this method can work correctly as long as the update occurs before the next
+getProduct for the same product, which might mean that it can work correctly for several
+years before exhibiting the error. This race condition happens as well in case there is a
+mechanism in place for guaranteeing that there is only one object per database key (see
+http://martinfowler.com/eaaCatalog/identityMap.html). We will see later how this can be handled 
+when JPA is used.
