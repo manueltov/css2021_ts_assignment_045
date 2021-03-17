@@ -1,6 +1,6 @@
 package facade.services;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import business.EventTransactionScripts;
 import facade.exceptions.ApplicationException;
@@ -16,7 +16,7 @@ public enum EventService {
 	}
 	
 	
-	public void createEvent(String name,LocalDate date,String place,double price) throws ApplicationException {
+	public void createEvent(String name,Date date,String place,double price) throws ApplicationException {
 		eventTS.createEvent(name,date,place,price);
 	}
 	

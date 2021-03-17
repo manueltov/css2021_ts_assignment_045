@@ -1,9 +1,10 @@
 package business;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 import dataaccess.EventRowDataGateway;
+import dataaccess.PersistenceException;
 import dataaccess.PlaceRowDataGateway;
 import dataaccess.SeatRowDataGateway;
 import dataaccess.TicketRowDataGateway;
@@ -11,7 +12,7 @@ import facade.exceptions.ApplicationException;
 
 public class EventTransactionScripts {
 
-	public void createEvent(String name, LocalDate date, String place, double price) throws ApplicationException {
+	public void createEvent(String name, Date date, String place, double price) throws ApplicationException {
 		if(name.trim().length() == 0) {
 			throw new ApplicationException("Event name not valid.");
 		}
@@ -36,15 +37,25 @@ public class EventTransactionScripts {
 		
 		Integer[] tickets = SeatRowDataGateway.getIDsOfPlace(p.get().getPlaceID());
 		TicketRowDataGateway[] trdg = new TicketRowDataGateway[tickets.length];
-		EventRowDataGateway ev = new EventRowDataGateway(name,date,p.get().getPlace(),price);
+		EventRowDataGateway ev = new EventRowDataGateway(name,date,p.get().getPlaceID(),price);
 		for (int i = 0; i < trdg.length; i++) {
 			trdg[i] = new TicketRowDataGateway(ev.getEventID(),p.get().getPlaceID(),tickets[i]);
 			if(trdg[i].getEventID() == -1 || trdg[i].getPlaceID() == -1 || trdg[i].getSeatID() == -1) {
 				throw new ApplicationException("Error while creating tickets.");
 			}
-			trdg[i].insert();
+			try {
+				trdg[i].insert();
+			} catch (PersistenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		ev.insert();
+		try {
+			ev.insert();
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
