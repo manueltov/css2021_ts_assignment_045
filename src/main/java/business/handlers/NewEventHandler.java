@@ -1,4 +1,4 @@
-package business;
+package business.handlers;
 
 
 import java.util.Date;
@@ -44,35 +44,8 @@ public class NewEventHandler {
 			em.close();
 		}
 	}
-
-	public void createEvent(String name,String eventType,List<EventTimeFrame> dates,int empresa) {
-		EntityManager em = emf.createEntityManager();
-		EventCatalog eventCatalog = new EventCatalog(em);
-		EmpresaCatalog empresasCatalog = new EmpresaCatalog(em);
-		EventTypeCatalog eventTypeCatalog = new EventTypeCatalog(em);
-		
-		try {
-			em.getTransaction().begin();
-			
-			EventType et = eventTypeCatalog.getEventTypeByName(eventType);
-			if(!eventCatalog.nameIsAvailable(name)) {
-				
-			}
-			
-			
-			
-			
-			Empresa e = empresasCatalog.getEmpresaById(empresa);			
-			
-			
-			
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
 	
-	public void createEvent() {
+	public void createEvent() throws ApplicationException {
 		EntityManager em = emf.createEntityManager();
 		EventCatalog eventCatalog = new EventCatalog(em);
 		try {
@@ -83,14 +56,19 @@ public class NewEventHandler {
 			if(empresa == null) {
 				throw new ApplicationException("No company defined");
 			}
-			if(timeFrames.size() == 0) {
+			if(timeFrames.isEmpty()) {
 				throw new ApplicationException("No dates defined");
 			}
 			
 			eventCatalog.addNewEvent(nome,eventType,timeFrames,empresa);
 			em.getTransaction().commit();
 		}catch (Exception e) {
-			// TODO: handle exception
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			throw new ApplicationException("Not possible to create new event",e);
+		}finally {
+			em.close();
 		}
 	}
 	

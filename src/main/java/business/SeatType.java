@@ -1,5 +1,5 @@
 package business;
 
 public enum SeatType {
-NORMAL,VIP
+EM_PE,SENTADO
 }

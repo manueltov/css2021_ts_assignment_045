@@ -7,51 +7,58 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import business.SeatType;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name=EventType.FIND_BY_NAME, query="SELECT evt FROM EventType evt WHERE evt.name = :" + 
+			EventType.EVENT_TYPE_NAME),
+	@NamedQuery(name=EventType.GET_ALL_NAMES, query="SELECT evt.name FROM EventType evt")
+})
 public class EventType {
-	
+
 	public static final String FIND_BY_NAME = "EventType.findByName";
 	public static final String EVENT_TYPE_NAME = "name";
 	public static final String GET_ALL_NAMES = "Event.getAllNames";
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	@Column(nullable = false, unique = true)
 	private String name;
-	
+
 	@Column(nullable = false)
 	private int max_watch;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private SeatType tipoDeLugares;
-	
+
 	EventType(){}
-	
+
 	public EventType(String tipo,int max_watch,SeatType tipoDeLugares) {
 		this.name = tipo;
 		this.max_watch = max_watch;
 		this.tipoDeLugares = tipoDeLugares;
 	}
-	
+
 	public int getMax_watch() {
 		return max_watch;
 	}
-	
+
 	public SeatType getTipoDeLugares() {
 		return tipoDeLugares;
 	}
-	
+
 	public String getTipo() {
 		return name;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 }

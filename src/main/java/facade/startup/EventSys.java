@@ -4,8 +4,7 @@ package facade.startup;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import business.NewEventHandler;
-import dataaccess.DataSource;
+import business.handlers.NewEventHandler;
 import facade.exceptions.ApplicationException;
 import facade.services.EventService;
 
@@ -28,7 +27,7 @@ public class EventSys {
 
 	    public void stopRun() {
 	        // Closes the database connection
-	        DataSource.INSTANCE.close();
+	        emf.close();
 	    }
 
 	    public EventService getEventService() {

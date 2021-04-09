@@ -7,8 +7,12 @@ import javax.persistence.*;
 
 import business.empresa.Empresa;
 import business.eventtype.EventType;
+import business.instalacao.Instalacao;
+
+
 
 @Entity
+@NamedQuery(name=Event.GET_ALL_NAMES, query="SELECT ev.name FROM Event ev")
 public class Event {
 
 
@@ -24,7 +28,6 @@ public class Event {
 	   @CollectionTable(name="Dates", joinColumns=@JoinColumn(name="id",referencedColumnName = "id"))
 	private List<EventTimeFrame> datas;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private EventType eventType;
 	
@@ -32,6 +35,9 @@ public class Event {
 	@Column(nullable = false)
 	private Empresa empresa;
 	
+	@ManyToOne
+	@Column(nullable = true)
+	private Instalacao instalacao;
 	Event(){}
 	
 	
@@ -41,6 +47,14 @@ public class Event {
 		this.datas = new ArrayList<>();
 		this.datas.addAll(timeFrames);
 		this.empresa = empresa;
+	}
+	
+	public Instalacao getInstalacao() {
+		return this.instalacao;
+	}
+	
+	public void setInstalacao(Instalacao instalacao) {
+		this.instalacao = instalacao;
 	}
 
 
