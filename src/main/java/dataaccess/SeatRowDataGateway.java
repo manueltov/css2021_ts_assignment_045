@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import datatypes.SeatType;
+import business.SeatType;
 
 public class SeatRowDataGateway {
 

@@ -3,11 +3,11 @@ package dbutils;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import business.SeatType;
 import dataaccess.DataSource;
 import dataaccess.PersistenceException;
 import dataaccess.PlaceRowDataGateway;
 import dataaccess.SeatRowDataGateway;
-import datatypes.SeatType;
 
 public class InitializeDatabase {
 	

@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Wed Mar 17 20:01:47 GMT 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0178-41c7-aa8f-0000071b4c70 
+Thu Mar 18 08:18:24 GMT 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0178-446a-0e41-0000071b31c8 
 on database directory C:\Users\eduar\git\css2021_ts_assignment_045\data\newderby\db with class loader sun.misc.Launcher$AppClassLoader@73d16e93 
 Loaded from file:/C:/Users/eduar/.m2/repository/org/apache/derby/derby/10.12.1.1/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation

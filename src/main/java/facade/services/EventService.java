@@ -3,21 +3,22 @@ package facade.services;
 import java.util.Date;
 
 import business.EventTransactionScripts;
+import business.NewEventHandler;
 import facade.exceptions.ApplicationException;
 
-public enum EventService {
-	INSTANCE;
+public class EventService {
 
-	
-	private EventTransactionScripts eventTS;
-	
-	private EventService() {
-		eventTS = new EventTransactionScripts();
+	private NewEventHandler newEventhandler;
+	public EventService(NewEventHandler newEventhandler) {
+		this.newEventhandler = newEventhandler;
 	}
 	
+	public void createEvent() {
+		
+	}
 	
 	public void createEvent(String name,Date date,String place,double price) throws ApplicationException {
-		eventTS.createEvent(name,date,place,price);
+		//newEventhandler.createEvent(name,date,place,price);
 	}
 	
 	
